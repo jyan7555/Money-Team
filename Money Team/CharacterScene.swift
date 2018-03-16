@@ -1,5 +1,5 @@
 //
-//  GameScene.swift
+//  CharacterScene.swift
 //  Money Team
 //
 //  Created by Student on 3/8/18.
@@ -7,17 +7,20 @@
 //
 
 import SpriteKit
-import GameplayKit
 
-class GameScene: SKScene {
-    
+class CharacterScene: SKScene {
     private var label : SKLabelNode?
     private var spinnyNode : SKShapeNode?
-    
+    var player : SKSpriteNode!
+
+    @IBAction func a(_ sender: Any) {
+        
+    }
     override func didMove(to view: SKView) {
+        player = self.childNode(withName: "Mountains") as? SKSpriteNode
         
         // Get label node from scene and store it for use later
-        self.label = self.childNode(withName: "//helloLabel") as? SKLabelNode
+        self.label = self.childNode(withName: "Mountains") as? SKLabelNode
         if let label = self.label {
             label.alpha = 0.0
             label.run(SKAction.fadeIn(withDuration: 2.0))
@@ -44,6 +47,11 @@ class GameScene: SKScene {
             n.strokeColor = SKColor.green
             self.addChild(n)
         }
+        
+        let moveNodeUp = SKAction.moveBy(x:0.0,
+                                         y:100.0,
+                                         duration: 1.0)
+        player.run(moveNodeUp)
     }
     
     func touchMoved(toPoint pos : CGPoint) {
@@ -63,10 +71,11 @@ class GameScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let scene2 = CharacterScene(fileNamed:"CharacterScene")
-        scene2?.scaleMode = .aspectFill
-        self.scene?.view?.presentScene(scene2)
+        if let label = self.label {
+            label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
+        }
         
+        for t in touches { self.touchDown(atPoint: t.location(in: self)) }
         
     }
     
